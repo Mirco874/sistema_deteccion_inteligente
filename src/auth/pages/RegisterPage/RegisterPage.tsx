@@ -57,8 +57,6 @@ export const RegisterPage = () => {
       navigate("/dashboard")
     }
 
-
-
   return (
     <AuthLayout>
         { registerState.hasError && (<Alert severity="error">{registerState.message}</Alert>) }
