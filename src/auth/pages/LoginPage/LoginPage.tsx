@@ -1,8 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Box, Button, TextField, InputLabel, Typography, Divider } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom"
+import { sistemaDeteccionApi } from "../../../api";
+
+import { localStorageManager } from "../../../utils"; 
 import { isEmail } from "../../../utils/validations";
+
 import "./LoginPage.css"
+
 
 interface loginFormData {
   email: string;
@@ -15,11 +20,16 @@ const initialLoginFormState: loginFormData = {
 }
 
 export const LoginPage = () => {
-  const { register, handleSubmit, watch, formState: { errors }  } = useForm<loginFormData>({ defaultValues: initialLoginFormState })
+  const { register, handleSubmit, formState: { errors }  } = useForm<loginFormData>({ defaultValues: initialLoginFormState })
   const navigate = useNavigate();
 
-  const onLoginSubmit = (loginFormData: loginFormData) => {
-    console.log(loginFormData)
+  const onLoginSubmit = async (loginFormData: loginFormData) => {
+    try {
+      const {data} = await sistemaDeteccionApi.post("auth/login", loginFormData )
+      localStorageManager.saveToken(data.data.access_token)
+    } catch (error) {
+      
+    }
   }
 
   const onEnterWithoutAccount = () => {
