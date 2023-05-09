@@ -1,76 +1,64 @@
 import { useForm } from "react-hook-form";
-import { Box, Button, TextField, InputLabel, Typography, Divider } from "@mui/material";
+import { Button, TextField, InputLabel, Typography, Divider, Alert } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom"
 import { sistemaDeteccionApi } from "../../../api";
 
 import { localStorageManager } from "../../../utils"; 
-import { isEmail } from "../../../utils/validations";
+import { validations } from "../../../utils";
 
-import "./LoginPage.css"
+import { useState } from "react";
+import { AuthLayout } from "../../layout";
 
 
-interface loginFormData {
+interface LoginFormData {
   email: string;
   password: string;
 }
 
-const initialLoginFormState: loginFormData = {
+interface LoginState {
+  hasError: boolean,
+  message: string
+} 
+
+const initialLoginFormState: LoginFormData = {
   email: "",
   password: ""
 }
 
 export const LoginPage = () => {
-  const { register, handleSubmit, formState: { errors }  } = useForm<loginFormData>({ defaultValues: initialLoginFormState })
+  const { register, handleSubmit, formState: { errors }  } = useForm<LoginFormData>({ defaultValues: initialLoginFormState })
+  const [loginState, setLoginState] = useState<LoginState>({ hasError: false, message: ""})
   const navigate = useNavigate();
 
-  const onLoginSubmit = async (loginFormData: loginFormData) => {
+  const onLoginSubmit = async (loginFormData: LoginFormData) => {
     try {
       const {data} = await sistemaDeteccionApi.post("auth/login", loginFormData )
       localStorageManager.saveToken(data.data.access_token)
-    } catch (error) {
-      
+
+      setTimeout(() => {
+        goToDashboard()
+      }, 500);
+
+    } catch (error: any) {
+
+      setLoginState({message: error.response.data.message, hasError: true});
+
+      setTimeout(() => {
+        setLoginState({...loginState, hasError: false});
+      }, 2000);
+
     }
   }
 
-  const onEnterWithoutAccount = () => {
+  const goToDashboard = () => {
     navigate("/dashboard")
   }
 
 
   return (
-    <Box display="flex" flexDirection="row" height="100vh" width="100vw" >
-      <Box 
-        className="background-image" 
-        component="aside" 
-        width="40%"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-          <Box  
-            component="img"
-            sx={{
-              height: 220,
-              width: 240,
-            }}
-            alt="Eagle"
-            src="../src/assets/eagle.png"
-          />    
-      </Box>
-      <Box component="aside" className="form-section" padding="5%">
-            <Box 
-              display="flex" 
-              flexDirection="column" 
-              alignItems="center"
-              >
-              <Typography 
-                variant="h4" 
-                component="h1"
-                > Sistema de detección de conducta criminal. </Typography>
-              <Typography variant="h5" component="p">Bienvenido!</Typography>
-            </Box>
-
+    <AuthLayout>
+      { loginState.hasError && (<Alert severity="error">{loginState.message}</Alert>) }
+            
             <form onSubmit={handleSubmit(onLoginSubmit)} style={{display: "flex", flexDirection: "column"}}>
               <InputLabel>
                 Correo electrónico*:
@@ -81,7 +69,7 @@ export const LoginPage = () => {
                 fullWidth
                 margin="normal"
                 {...register("email",{ 
-                  validate: isEmail,
+                  validate: validations.isEmail,
                   required: "Este campo es obligatorio",
                 })}
                 error={!!errors.email}
@@ -96,6 +84,7 @@ export const LoginPage = () => {
                 size="small"
                 fullWidth
                 margin="normal"
+                type="password"
                 {...register("password",{
                   required: "Este campo es obligatorio",
                 })}
@@ -114,7 +103,7 @@ export const LoginPage = () => {
               <Button 
                 variant="outlined"
                 sx={{marginBlock:"10px"}}
-                onClick={onEnterWithoutAccount}
+                onClick={goToDashboard}
               >
                 Ingresar sin cuenta
               </Button>
@@ -129,7 +118,6 @@ export const LoginPage = () => {
               </Typography>
 
             </form>
-      </Box>
-    </Box>
+    </AuthLayout>
   )
 }
