@@ -9,11 +9,16 @@ interface Props {
 export const AuthLayout: FC<Props> = ({ children }) => {
 
   return (
-    <Box display="flex" flexDirection="row" height="100vh" width="100vw" >
+    <Box 
+      display="flex" 
+      flexDirection="row" 
+      height="100vh" 
+      width="100vw" 
+    >
       <Box 
         className="background-image" 
         component="aside" 
-        width="40%"
+        width="45%"
         display="flex"
         flexDirection="column"
         alignItems="center"
@@ -29,7 +34,11 @@ export const AuthLayout: FC<Props> = ({ children }) => {
             src="../src/assets/eagle.png"
           />    
       </Box>
-      <Box component="aside" className="form-section" padding="5%">
+      <Box 
+        component="aside" 
+        className="form-section" 
+        width="55%"
+      >
             <Box 
               display="flex" 
               flexDirection="column" 
@@ -41,9 +50,11 @@ export const AuthLayout: FC<Props> = ({ children }) => {
                 > Sistema de detección de conducta criminal. </Typography>
               <Typography variant="h5" component="p">Bienvenido!</Typography>
             </Box>
-            <Box>
+
+            <Box padding="3%">
                 {children}
             </Box>
+
       </Box>
     </Box>
   )
