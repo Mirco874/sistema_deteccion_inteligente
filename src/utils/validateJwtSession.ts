@@ -1,6 +1,6 @@
 import { sistemaDeteccionApi } from "../api";
 
-const getHeaders = (): any =>{
+export const getHeaders = (): any =>{
     const token = localStorage.getItem("token") || "";
     return {
         headers:{ 
