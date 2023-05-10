@@ -1,9 +1,9 @@
-import { AppBar, Box, Button, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Divider, Drawer, Grid, List, Toolbar, Typography } from "@mui/material";
 import React, { FC } from "react"
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { SessionButton } from "../components";
+import { SessionButton, SidebarLink } from "../components";
 
 interface Props {
     children: React.ReactNode;
@@ -45,34 +45,9 @@ export const DetectionPanelLayout: FC<Props> = ({ children }) => {
                 </Toolbar>
                 <Divider />
                 <List>
-                    <ListItem disablePadding>
-
-                        <ListItemButton>
-                            <ListItemIcon >
-                                <DashboardIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Inicio" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <VisibilityIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Vigilancia Inteligente" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <NewspaperIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Reportes" />
-                        </ListItemButton>
-                    </ListItem>
-
+                    <SidebarLink text="Inicio" location="/" icon ={<DashboardIcon />} />
+                    <SidebarLink text="Vigilancia Inteligente" location="/surveillance" icon ={<VisibilityIcon />} />
+                    <SidebarLink text="Reportes" location="/reports" icon ={<NewspaperIcon />} />
                 </List>
             </Drawer>
         </Grid>

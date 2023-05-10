@@ -1,5 +1,9 @@
+import { DetectionPanelLayout } from "../../layouts"
+
 export const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <DetectionPanelLayout>
+      pagina de estadisticas
+    </DetectionPanelLayout>
   )
 }
