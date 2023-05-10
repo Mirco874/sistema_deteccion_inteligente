@@ -1,13 +1,16 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useCallback, useEffect, useReducer } from 'react';
 import { CamerasContext, CamerasReducer } from '..';
 import { localStorageManager } from '../../utils';
+import { CameraConected, Devices } from '../../interfaces';
 
 export interface CamerasState {
-    cameras: string[];
+     systemConnectedCameras: CameraConected[];
+     deviceConnectedCameras: Devices[];
 }
 
 const CAMERAS_INITIAL_STATE: CamerasState={
-    cameras: []
+     systemConnectedCameras: [],
+     deviceConnectedCameras: []
 }
 
 interface Props{
@@ -17,24 +20,38 @@ interface Props{
 export const CamerasProvider:FC<Props> = ({ children }) => {
      const [state, dispatch] = useReducer( CamerasReducer, CAMERAS_INITIAL_STATE );
 
-     const loadConnectedCameras = () =>{
-          const localStorageCamerasInfo: string[] = localStorageManager.getCamerasConected();
+     const loadConnectedCameras = useCallback(() =>{
+          const localStorageCamerasInfo: CameraConected[] = localStorageManager.getCamerasConected();
           dispatch({ type: '[Cameras] - load connected cameras', payload: localStorageCamerasInfo });
-     }
+     }, []);
 
-     const connectCamera = (cameraId: string) =>{
-          localStorageManager.conectCamera(cameraId);
-          dispatch({ type: '[Cameras] - connect camera', payload: cameraId });
-     }
+     const connectCamera = useCallback((id: string, nombre: string) =>{
+          localStorageManager.conectCamera(id, nombre);
+          dispatch({ type: '[Cameras] - connect camera', payload: {id,nombre} });
+     },[])
 
-     const disconnectCamera = (cameraId: string) =>{
-          localStorageManager.disconnectCamera(cameraId);
-          dispatch({ type: '[Cameras] - disconnect camera', payload: cameraId });
+     const disconnectCamera = useCallback((id: string) =>{
+          localStorageManager.disconnectCamera(id);
+          dispatch({ type: '[Cameras] - disconnect camera', payload: id });
+     },[])
+   
+     const getDeviceConnectedDevices = async() =>{
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const camerasConnected = devices.filter((camera: Devices) => camera.kind==="videoinput");
+          dispatch({ type: '[Cameras] - load device connected cameras', payload: camerasConnected });
      }
 
      useEffect(()=>{
           loadConnectedCameras();
-     },[])
+     },[loadConnectedCameras])
+
+     useEffect(
+       () => {
+          getDeviceConnectedDevices()
+       },
+       []
+     );
+
 
      return (
           <CamerasContext.Provider value={{

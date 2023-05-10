@@ -1,3 +1,5 @@
+import { CameraConected } from "../interfaces";
+
 export const saveToken = (token: string) => {
     localStorage.setItem("token", token);
 }
@@ -6,7 +8,7 @@ export const getToken = (): string | null => {
     return localStorage.getItem("token");
 }
 
-export const getCamerasConected = (): string[] => {
+export const getCamerasConected = (): CameraConected[] => {
     const camerasList: string | null = localStorage.getItem("camerasConected");
 
     if(!camerasList){
@@ -16,20 +18,26 @@ export const getCamerasConected = (): string[] => {
     return JSON.parse(camerasList);
 }
 
-export const conectCamera = (cameraId: string) =>{
-    const camerasConected: string[] = getCamerasConected();
+export const conectCamera = (id: string, nombre: string) =>{
+    const camerasConected: CameraConected[] = getCamerasConected();
 
-    if(!camerasConected.includes(cameraId)){
-        camerasConected.push(cameraId);
+    if(isConnectedCamera(id)){
+        camerasConected.push({id, nombre});
         localStorage.setItem("camerasConected", JSON.stringify(camerasConected));
     }
 }
 
-export const disconnectCamera = (cameraId: string) =>{
-    const camerasConected: string[] = getCamerasConected();
+const isConnectedCamera = (id: string): boolean =>{
+    const camerasConected: CameraConected[] = getCamerasConected();
+    const isConnectedCamera = camerasConected.filter((camera: CameraConected)=>( camera.id === id));
+    return (isConnectedCamera.length > 0);
+} 
 
-    if(camerasConected.includes(cameraId)){
-        const newCamerasConnectedState = camerasConected.filter((camera)=>camera != cameraId);
+export const disconnectCamera = (id: string) =>{
+    const camerasConected: CameraConected[] = getCamerasConected();
+
+    if(isConnectedCamera(id)){
+        const newCamerasConnectedState = camerasConected.filter((camera: CameraConected)=>camera.id !== id);
         localStorage.setItem("camerasConected", JSON.stringify(newCamerasConnectedState));
     }
 }
