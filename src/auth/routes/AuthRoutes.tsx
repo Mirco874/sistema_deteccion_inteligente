@@ -12,7 +12,7 @@ export const AuthRoutes = () => {
     if (isUserLogged) {
       const { email } = JWTDecoder.decodeSavedToken();
       if (email.length > 0) {
-        navigate("/");
+        navigate("/surveillance");
       }
     }
   }, [navigate]);

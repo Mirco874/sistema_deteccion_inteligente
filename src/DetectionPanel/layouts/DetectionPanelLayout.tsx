@@ -1,8 +1,9 @@
-import { AppBar, Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import React, { FC } from "react"
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
+import { SessionButton } from "../components";
 
 interface Props {
     children: React.ReactNode;
@@ -80,7 +81,6 @@ export const DetectionPanelLayout: FC<Props> = ({ children }) => {
             <AppBar 
                 position="static"
                 sx={{
-
                     background:"white", 
                     color: "black", 
                     boxShadow: 1
@@ -90,6 +90,8 @@ export const DetectionPanelLayout: FC<Props> = ({ children }) => {
                 <Typography variant="h5" component="h1">
                     Vigilancia
                 </Typography>
+                <Box flex={1}></Box>
+                <SessionButton/>
                 </Toolbar>
             </AppBar>
             <Box padding="20px">

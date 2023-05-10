@@ -17,11 +17,15 @@ export const existUserLogged = async () => {
         await sistemaDeteccionApi.get("api/v1/user/validate", getHeaders());
         return true;
       } catch (error) {
-        localStorage.removeItem("token")
+        removeSession();
         return false;
       }
     }
   
     return false;
-  };
+};
+
+export const removeSession = () => {
+    localStorage.removeItem("token")
+}
   
