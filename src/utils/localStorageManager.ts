@@ -18,10 +18,10 @@ export const getCamerasConected = (): CameraConected[] => {
     return JSON.parse(camerasList);
 }
 
-export const conectCamera = (id: string, nombre: string) =>{
+export const connectCamera = (id: string, nombre: string) =>{
     const camerasConected: CameraConected[] = getCamerasConected();
-
-    if(isConnectedCamera(id)){
+    
+    if(!isConnectedCamera(id)){
         camerasConected.push({id, nombre});
         localStorage.setItem("camerasConected", JSON.stringify(camerasConected));
     }

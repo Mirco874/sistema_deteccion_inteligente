@@ -22,11 +22,14 @@ export const CamerasProvider:FC<Props> = ({ children }) => {
 
      const loadConnectedCameras = useCallback(() =>{
           const localStorageCamerasInfo: CameraConected[] = localStorageManager.getCamerasConected();
+          if(localStorageCamerasInfo.length===0){
+               localStorage.setItem("camerasConected","[]")
+          }
           dispatch({ type: '[Cameras] - load connected cameras', payload: localStorageCamerasInfo });
      }, []);
 
      const connectCamera = useCallback((id: string, nombre: string) =>{
-          localStorageManager.conectCamera(id, nombre);
+          localStorageManager.connectCamera(id, nombre);
           dispatch({ type: '[Cameras] - connect camera', payload: {id,nombre} });
      },[])
 
@@ -43,7 +46,7 @@ export const CamerasProvider:FC<Props> = ({ children }) => {
 
      useEffect(()=>{
           loadConnectedCameras();
-     },[loadConnectedCameras])
+     },[])
 
      useEffect(
        () => {
