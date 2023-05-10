@@ -54,7 +54,7 @@ export const RegisterPage = () => {
     }
   
     const goToDashboard = () => {
-      navigate("/dashboard")
+      navigate("/surveillance")
     }
 
   return (

@@ -51,7 +51,7 @@ export const LoginPage = () => {
   }
 
   const goToDashboard = () => {
-    navigate("/dashboard")
+    navigate("/surveillance")
   }
 
 
