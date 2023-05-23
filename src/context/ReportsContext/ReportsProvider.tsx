@@ -1,8 +1,6 @@
 import { FC, useCallback, useEffect, useReducer } from 'react';
 import { Report } from '../../interfaces';
 import { ReportsContext, ReportsReducer } from '..';
-import { JWTDecoder, validateJwtSession } from '../../utils';
-import { sistemaDeteccionApi } from '../../api';
 import { reports } from '../../data';
 
 export interface ReportsState {

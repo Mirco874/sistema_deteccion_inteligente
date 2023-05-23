@@ -44,6 +44,11 @@ export const CamerasProvider:FC<Props> = ({ children }) => {
           dispatch({ type: '[Cameras] - load device connected cameras', payload: camerasConnected });
      }
 
+     const setConnectedDevices = (mediaDevices:any) => {
+          const camerasConnected = mediaDevices.filter((device: any) => device.kind === "videoinput")
+          dispatch({ type: '[Cameras] - load device connected cameras', payload: camerasConnected});
+     }
+
      useEffect(()=>{
           loadConnectedCameras();
      },[])
@@ -54,6 +59,10 @@ export const CamerasProvider:FC<Props> = ({ children }) => {
        },
        []
      );
+
+     // useEffect(    () => {
+     //      navigator.mediaDevices.enumerateDevices().then(setConnectedDevices);
+     //    }, [])
 
 
      return (

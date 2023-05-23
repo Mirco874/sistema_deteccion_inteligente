@@ -19,8 +19,8 @@ export const CamerasReducer = ( state: CamerasState , action: CamerasAction ): C
             return { ...state, deviceConnectedCameras: action.payload }
 
         case "[Cameras] - connect camera":
-            state.systemConnectedCameras.push(action.payload);
-            return { ...state };
+
+            return { ...state, systemConnectedCameras:[...state.systemConnectedCameras, action.payload] };
 
         case "[Cameras] - disconnect camera":
             return { 
